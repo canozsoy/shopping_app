@@ -1,14 +1,18 @@
 import express, { Express } from 'express';
-import dotenv from 'dotenv';
 
 import indexRoute from './routes/index';
 import productRoute from './routes/product';
 import customerRoute from './routes/customer';
 import notFoundRoute from './routes/not_found';
 import errorHandler from './strategies/error_handler';
+import { sequelize } from './models';
 
-dotenv.config();
 const app : Express = express();
+
+(async () => {
+  await sequelize.sync({ force: true });
+})();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/', indexRoute);

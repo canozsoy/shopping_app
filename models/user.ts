@@ -1,18 +1,21 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from './config';
+import {
+  Model, DataTypes, Optional, Sequelize,
+} from 'sequelize';
 
-export interface UserAttributes extends Model {
-  id: number,
+export interface UserAttributes {
+  id: string,
   username: string,
   password: string,
   role: string
 }
 
-export const User = sequelize.define<UserAttributes>('user', {
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+interface UserInstance extends Model<UserAttributes, UserCreationAttributes> {}
+
+export const UserCreate = (sequelize:Sequelize) => sequelize.define<UserInstance>('user', {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     primaryKey: true,
-    autoIncrement: true,
     allowNull: false,
     unique: true,
   },
