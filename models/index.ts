@@ -1,16 +1,18 @@
 import { Sequelize } from 'sequelize';
-import dbConfig from '../db_config.json';
+import dotenv from 'dotenv';
 import { UserCreate } from './user';
 import { ProductCreate } from './product';
 import { OrderCreate } from './order';
 import OrderItemsCreate from './order_items';
 
+dotenv.config();
+
 const sequelize = new Sequelize(
-  dbConfig.DB_NAME as string,
-  dbConfig.USERNAME as string,
-  dbConfig.PASSWORD as string,
+  process.env.DB_NAME as string,
+  process.env.DB_USER as string,
+  process.env.PASSWORD as string,
   {
-    host: dbConfig.HOST,
+    host: process.env.HOST,
     dialect: 'postgres',
     logging: false,
     pool: {

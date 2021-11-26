@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "devstart": "nodemon app.ts",
+    "devstart": "nodemon --delay 2000ms app.ts",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,13 +16,17 @@
     "node": "16.13.0"
   },
   "dependencies": {
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "joi": "^17.4.2",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.12.0-alpha.1"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
+    "@types/joi": "^17.2.3",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "eslint": "^8.3.0",
