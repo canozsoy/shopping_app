@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-const signupValidations = Joi.object({
+const userValidations = Joi.object({
   username: Joi.string()
     .trim()
     .alphanum()
@@ -15,4 +15,4 @@ const signupValidations = Joi.object({
     .required(),
 });
 
-export default signupValidations;
+export default userValidations;
