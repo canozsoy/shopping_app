@@ -1,14 +1,13 @@
 import express from 'express';
 import productController from '../controllers/product_controller';
+import { verifyJWT } from '../strategies/jwt';
 
 const router = express.Router();
 
-router.route('/')
-  .get(productController.listAllProducts)
-  .post(productController.createProduct);
+router.use(verifyJWT);
 
-router.route('/:id')
-  .get(productController.getProduct)
-  .post(productController.changeProduct);
+router.get('/', productController.listAllProducts);
+
+router.get('/:id', productController.getProduct);
 
 export default router;
