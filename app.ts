@@ -6,11 +6,13 @@ import customerRoute from './routes/customer';
 import notFoundRoute from './routes/not_found';
 import errorHandler from './strategies/error_handler';
 import { sequelize } from './models';
+import insertAdmin from './models/insert_admin';
 
 const app : Express = express();
 
 (async () => {
-  await sequelize.sync({ force: true });
+  await sequelize.sync({ alter: true });
+  await insertAdmin();
 })();
 
 app.use(express.json());
