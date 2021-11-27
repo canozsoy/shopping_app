@@ -27,7 +27,27 @@ const createProductValidation = Joi.object({
     .trim(),
 });
 
+const idValidation = Joi.string().guid({
+  version: [
+    'uuidv4',
+  ],
+}).message('Id must be a valid GUID');
+
+const changeProductValidation = createProductValidation.keys({
+  name: Joi.string()
+    .trim()
+    .max(100),
+  price: Joi.number()
+    .positive(),
+}).min(1)
+  .messages({
+    'object.min': 'Req.body must have at least 1 key',
+    'object.unknown': 'ProductId must have a valid value',
+  });
+
 export {
   userValidations,
   createProductValidation,
+  changeProductValidation,
+  idValidation,
 };
