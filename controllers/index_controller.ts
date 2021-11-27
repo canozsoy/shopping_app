@@ -38,7 +38,7 @@ const loginPost = async (req : Request, res : Response, next: NextFunction) => {
     return next(new CustomErrorObject([{ message: 'Incorrect username or password' }], 401));
   }
 
-  const token = createJWT(username, currentUser.role);
+  const token = createJWT(currentUser.id, username, currentUser.role);
   return res.json({
     message: 'Successfully Logged In',
     currentUser: {
@@ -81,7 +81,7 @@ const signupPost = async (req : Request, res : Response, next: NextFunction) => 
     return next(errorObj);
   }
 
-  const token = createJWT(username, newUser.role);
+  const token = createJWT(newUser.id, username, newUser.role);
 
   return res.json({
     message: 'Successfully Created',

@@ -2,10 +2,10 @@ import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import CustomErrorObject from './error_object';
 
-const createJWT = (username: string, role:string):string => {
+const createJWT = (id:string, username: string, role:string):string => {
   const jwtSecret = process.env.JWT_SECRET as string;
   const jwtExpires = process.env.JWT_EXPIRES as string;
-  return jwt.sign({ username, role }, jwtSecret, {
+  return jwt.sign({ id, username, role }, jwtSecret, {
     expiresIn: +jwtExpires,
   });
 };
