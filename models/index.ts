@@ -43,5 +43,5 @@ Product.hasMany(OrderItems, {
 OrderItems.belongsTo(Product);
 
 export {
-  Sequelize, sequelize, User, Order, Product,
+  Sequelize, sequelize, User, Order, Product, OrderItems,
 };
