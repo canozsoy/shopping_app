@@ -15,6 +15,14 @@ const userValidations = Joi.object({
     .required(),
 });
 
+const adminUserValidations = userValidations.keys({
+  role: Joi.string()
+    .trim()
+    .alphanum()
+    .required()
+    .valid('customer', 'admin'),
+});
+
 const createProductValidation = Joi.object({
   name: Joi.string()
     .trim()
@@ -50,4 +58,5 @@ export {
   createProductValidation,
   changeProductValidation,
   idValidation,
+  adminUserValidations,
 };
