@@ -35,6 +35,16 @@ const createProductValidation = Joi.object({
     .trim(),
 });
 
+const orderValidation = Joi.object({
+  products: Joi.array()
+    .items(Joi.string()
+      .guid({
+        version: [
+          'uuidv4',
+        ],
+      })).required(),
+});
+
 const idValidation = Joi.string().guid({
   version: [
     'uuidv4',
@@ -59,4 +69,5 @@ export {
   changeProductValidation,
   idValidation,
   adminUserValidations,
+  orderValidation,
 };
