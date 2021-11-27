@@ -9,8 +9,29 @@ import {
 
 const listAllOrders = [
   verifySelf,
-  (req : Request, res : Response) => {
-    res.sendStatus(200);
+  async (req : Request, res : Response, next: NextFunction) => {
+    const idValidationResult = idValidation.validate(req.params.customerId);
+    if (idValidationResult.error) {
+      const messages = formatErrorValidationMessage(idValidationResult.error);
+      return next(new CustomErrorObject(messages, 400));
+    }
+
+    const { customerId } = req.params;
+    let orders;
+    try {
+      orders = await Order.findAll({ where: { userId: customerId } });
+    } catch (err) {
+      const messages = formatErrorDBMessage(err);
+      return next(new CustomErrorObject(messages, 500));
+    }
+    if (!orders.length) {
+      return next(new CustomErrorObject([{ message: 'No order found' }], 404));
+    }
+
+    return res.json({
+      message: 'Successfully Found',
+      orders,
+    });
   },
 ];
 
@@ -88,8 +109,54 @@ const createOrder = [
 
 const orderDetail = [
   verifySelf,
-  (req : Request, res : Response) => {
-    res.sendStatus(200);
+  async (req : Request, res : Response, next: NextFunction) => {
+    const { customerId, orderId } = req.params;
+    const customerIdValidationResult = idValidation.validate(customerId);
+    const orderIdValidationResult = idValidation.validate(orderId);
+    const error = customerIdValidationResult.error || orderIdValidationResult.error;
+    if (error) {
+      const messages = formatErrorValidationMessage(error);
+      return next(new CustomErrorObject(messages, 400));
+    }
+
+    let queryResults;
+    try {
+      queryResults = await Promise.all([
+        OrderItems.findAll({ where: { orderId } }),
+        Order.findOne({ where: { id: orderId } }),
+      ]);
+    } catch (err) {
+      const messages = formatErrorDBMessage(err);
+      return next(new CustomErrorObject(messages, 500));
+    }
+
+    const [orderItems, order] = queryResults;
+
+    if (!orderItems.length || !order) {
+      return next(new CustomErrorObject([{ message: 'No order found' }], 404));
+    }
+
+    const productIds = orderItems.map((x) => x.productId);
+
+    let products;
+    try {
+      products = await Product.findAll({ where: { id: productIds } });
+    } catch (err) {
+      const messages = formatErrorDBMessage(err);
+      return next(new CustomErrorObject(messages, 500));
+    }
+
+    if (!products.length) {
+      return next(new CustomErrorObject([{ message: 'Products not found' }], 404));
+    }
+
+    return res.json({
+      message: 'Successfully Found',
+      orderDetails: {
+        order,
+        products,
+      },
+    });
   },
 ];
 
