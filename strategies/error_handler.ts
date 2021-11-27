@@ -1,9 +1,8 @@
-import {
-  ErrorRequestHandler, Request, Response, NextFunction,
-} from 'express';
+import { Request, Response, NextFunction } from 'express';
+import CustomErrorObject from './error_object';
 
 const errorHandler = (
-  err : ErrorRequestHandler,
+  err : CustomErrorObject,
   req : Request,
   res : Response,
   next : NextFunction,
@@ -11,8 +10,8 @@ const errorHandler = (
   if (res.headersSent) {
     return next(err);
   }
-  return res.status(500).json({
-    error: err,
+  return res.status(err.status || 500).json({
+    error: err.object,
   });
 };
 
