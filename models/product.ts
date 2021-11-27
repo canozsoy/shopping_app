@@ -25,7 +25,7 @@ export const ProductCreate = (sequelize:Sequelize) => sequelize
   name: {
     type: DataTypes.STRING(100),
     allowNull: false,
-    unique: true,
+    unique: false,
   },
   price: {
     type: DataTypes.DOUBLE,
