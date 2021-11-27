@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
-import userValidations from './validations/validations';
+import { userValidations } from './validations/validations';
 import { formatErrorValidationMessage, formatErrorDBMessage } from './helpers/format_error_message';
 import { User } from '../models';
 import CustomErrorObject from '../strategies/error_object';
