@@ -15,4 +15,19 @@ const userValidations = Joi.object({
     .required(),
 });
 
-export default userValidations;
+const createProductValidation = Joi.object({
+  name: Joi.string()
+    .trim()
+    .max(100)
+    .required(),
+  price: Joi.number()
+    .positive()
+    .required(),
+  detail: Joi.string()
+    .trim(),
+});
+
+export {
+  userValidations,
+  createProductValidation,
+};
