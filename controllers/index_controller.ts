@@ -25,17 +25,17 @@ const loginPost = async (req : Request, res : Response, next: NextFunction) => {
     return next(new CustomErrorObject(messages));
   }
   if (!currentUser) {
-    return next(new CustomErrorObject({ message: 'Incorrect username or password' }, 401));
+    return next(new CustomErrorObject([{ message: 'Incorrect username or password' }], 401));
   }
 
   let passwordValidation;
   try {
     passwordValidation = await bcrypt.compare(password, currentUser.password);
   } catch (err) {
-    return next(new CustomErrorObject({ message: 'Internal server error' }));
+    return next(new CustomErrorObject([{ message: 'Internal server error' }]));
   }
   if (!passwordValidation) {
-    return next(new CustomErrorObject({ message: 'Incorrect username or password' }, 401));
+    return next(new CustomErrorObject([{ message: 'Incorrect username or password' }], 401));
   }
 
   const token = createJWT(username, currentUser.role);
