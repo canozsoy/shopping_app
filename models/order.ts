@@ -9,12 +9,14 @@ export interface OrderAttributes {
 }
 
 interface OrderCreationAttributes extends Optional<OrderAttributes, 'id'> {}
-interface OrderInstance extends Model<OrderAttributes, OrderCreationAttributes> {}
+interface OrderInstance extends Model<OrderAttributes, OrderCreationAttributes>
+  , OrderAttributes {}
 
 export const OrderCreate = (sequelize: Sequelize) => sequelize
   .define<OrderInstance>('order', {
   id: {
     type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
     allowNull: false,
     unique: true,

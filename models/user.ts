@@ -1,5 +1,5 @@
 import {
-  Model, DataTypes, Optional, Sequelize,
+  Model, DataTypes, Sequelize, Optional,
 } from 'sequelize';
 
 export interface UserAttributes {
@@ -9,12 +9,13 @@ export interface UserAttributes {
   role: string
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
-interface UserInstance extends Model<UserAttributes, UserCreationAttributes> {}
+interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'role'> {}
+interface UserInstance extends Model<UserAttributes, UserCreationAttributes>, UserAttributes {}
 
 export const UserCreate = (sequelize:Sequelize) => sequelize.define<UserInstance>('user', {
   id: {
     type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
     allowNull: false,
     unique: true,
@@ -33,5 +34,6 @@ export const UserCreate = (sequelize:Sequelize) => sequelize.define<UserInstance
     type: DataTypes.TEXT,
     allowNull: false,
     unique: false,
+    defaultValue: 'customer',
   },
 });
