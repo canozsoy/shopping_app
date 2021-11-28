@@ -1,0 +1,493 @@
+{
+	"info": {
+		"_postman_id": "45ec26af-8bfd-4cc1-b616-fafb1770c85d",
+		"name": "Shopping App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "index",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "test",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "test",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/signup",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "login ve signup'ın oldugu folder index\n\njwt'yi almak için login veya signup'a istek gelmeli"
+		},
+		{
+			"name": "admin-product",
+			"item": [
+				{
+					"name": "create product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDIwNzU2LCJleHAiOjE2MzgxMDcxNTZ9._veumTzGJ_9p9JgyRG8ghcFjslmreRXwPL6I-p9MfxE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "diş fırçası",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "1000",
+									"type": "text"
+								},
+								{
+									"key": "detail",
+									"value": "dişleri bembeyaz yapar",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/product-admin",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDIwNzU2LCJleHAiOjE2MzgxMDcxNTZ9._veumTzGJ_9p9JgyRG8ghcFjslmreRXwPL6I-p9MfxE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "diş fırçası",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "price",
+									"value": "2000",
+									"type": "text"
+								},
+								{
+									"key": "detail",
+									"value": "dişleri bembeyaz yapar",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/product-admin/:productId",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product-admin",
+								":productId"
+							],
+							"variable": [
+								{
+									"key": "productId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Sadece admin erişimi olan product ekleme / değiştirme işlemlerinin olduğu endpointler"
+		},
+		{
+			"name": "admin-user",
+			"item": [
+				{
+					"name": "list all users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDIwNzU2LCJleHAiOjE2MzgxMDcxNTZ9._veumTzGJ_9p9JgyRG8ghcFjslmreRXwPL6I-p9MfxE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:3000/user-admin",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "admin user create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDIwNzU2LCJleHAiOjE2MzgxMDcxNTZ9._veumTzGJ_9p9JgyRG8ghcFjslmreRXwPL6I-p9MfxE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "admin2",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin2",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/user-admin",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user-admin"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Sadece admin'in user listeleme ve ekleme gibi şeyler yapabileceği endpointler\n\nSignup'a ekstra olarak admin ekleme opsiyonu var"
+		},
+		{
+			"name": "customer-order",
+			"item": [
+				{
+					"name": "createOrder",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiNzQzZTljLWZhYmMtNDkwYy04ODQxLWUwNzEyYTYwYmI4OSIsInVzZXJuYW1lIjoiY2FuIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNjM4MDI4Nzk0LCJleHAiOjE2MzgxMTUxOTR9.J_jbjwJI8fDADuIUM82jYBqjKiVaVbDLcfNsY2qdFL4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "products",
+									"value": "7eb0024b-3260-49f2-b301-00c0b2fb4467",
+									"type": "text"
+								},
+								{
+									"key": "products",
+									"value": "6f218a09-890a-4cac-a870-82ba7cc64ea2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/customer/:customerId/order",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"customer",
+								":customerId",
+								"order"
+							],
+							"variable": [
+								{
+									"key": "customerId",
+									"value": "ab743e9c-fabc-490c-8841-e0712a60bb89"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list orders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiNzQzZTljLWZhYmMtNDkwYy04ODQxLWUwNzEyYTYwYmI4OSIsInVzZXJuYW1lIjoiY2FuIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNjM4MDI4Nzk0LCJleHAiOjE2MzgxMTUxOTR9.J_jbjwJI8fDADuIUM82jYBqjKiVaVbDLcfNsY2qdFL4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/customer/:customerId/order",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"customer",
+								":customerId",
+								"order"
+							],
+							"variable": [
+								{
+									"key": "customerId",
+									"value": "ab743e9c-fabc-490c-8841-e0712a60bb89"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order detail",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiNzQzZTljLWZhYmMtNDkwYy04ODQxLWUwNzEyYTYwYmI4OSIsInVzZXJuYW1lIjoiY2FuIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNjM4MDI4Nzk0LCJleHAiOjE2MzgxMTUxOTR9.J_jbjwJI8fDADuIUM82jYBqjKiVaVbDLcfNsY2qdFL4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:3000/customer/:customerId/order/:orderId",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"customer",
+								":customerId",
+								"order",
+								":orderId"
+							],
+							"variable": [
+								{
+									"key": "customerId",
+									"value": "ab743e9c-fabc-490c-8841-e0712a60bb89"
+								},
+								{
+									"key": "orderId",
+									"value": "6f218a09-890a-4cac-a870-82ba7cc64ea2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "customerların order oluşturabildiği orderlarını listeleyebildiği ve order detaylarını görüntüleyebildiği endpointler"
+		},
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "list-products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlN2FiNGQzLWFmODAtNGRjMS1iNmE5LTAyOTcwYjIxMDYxYiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MzgxMDE3OTIsImV4cCI6MTYzODE4ODE5Mn0.CKQgFciCaWkab_jED5ZIjQAoCWdYToCz5FMb7M8zS7E",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/product",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-product",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlN2FiNGQzLWFmODAtNGRjMS1iNmE5LTAyOTcwYjIxMDYxYiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MzgxMDE3OTIsImV4cCI6MTYzODE4ODE5Mn0.CKQgFciCaWkab_jED5ZIjQAoCWdYToCz5FMb7M8zS7E",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/product/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "7eb0024b-3260-49f2-b301-00c0b2fb4467"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "endpoints to find all product ids and product details"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
