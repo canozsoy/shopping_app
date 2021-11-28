@@ -20,7 +20,7 @@ const logMiddleware = (req:Request, res:Response, next:NextFunction) => {
   ];
   const row = `${items.join(',')}\n`;
 
-  fsPromise.open(fileName, 'r')
+  fsPromise.access(fileName)
     .then(() => {
       writeToFile(row, fileName);
     }).catch(() => {
