@@ -25,20 +25,23 @@ const invalidCases = [
 ];
 
 describe('POST /login', () => {
-  validCases.forEach((x, i) => {
-    it(`Valid cases should return 401 (not found in database) or 200 (login) ${i}`, async () => {
-      const res = await request(app).post('/login').send(x);
-      if (res.status === 401) {
-        expect(res.status).to.eql(401);
-        const body = JSON.parse(res.error.text);
-        expect(body).to.include.keys('error');
-      } else {
-        expect(res.status).to.eql(200);
-        expect(res.body).to.include.keys(['message', 'currentUser']);
-        expect(res.body.currentUser).to.include.keys(['id', 'username', 'role', 'jwt']);
-      }
+  describe('Valid cases', () => {
+    validCases.forEach((x, i) => {
+      it(`Valid cases should return 401 (not found in database) or 200 (login) ${i}`, async () => {
+        const res = await request(app).post('/login').send(x);
+        if (res.status === 401) {
+          expect(res.status).to.eql(401);
+          const body = JSON.parse(res.error.text);
+          expect(body).to.include.keys('error');
+        } else {
+          expect(res.status).to.eql(200);
+          expect(res.body).to.include.keys(['message', 'currentUser']);
+          expect(res.body.currentUser).to.include.keys(['id', 'username', 'role', 'jwt']);
+        }
+      });
     });
   });
+
   invalidCases.forEach((x, i) => {
     it(`Invalid cases should return 400 ${i}`, async () => {
       const res = await request(app).post('/login').send(x);

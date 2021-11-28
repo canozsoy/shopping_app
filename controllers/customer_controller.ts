@@ -69,7 +69,7 @@ const createOrder = [
     if (!customer) {
       return next(new CustomErrorObject([{ message: 'User not found' }], 404));
     }
-    if (!products.length) {
+    if (!productsDB.length) {
       return next(new CustomErrorObject([{ message: 'Products not found' }], 404));
     }
     if (products.length !== productsDB.length) {
