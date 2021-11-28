@@ -1,3 +1,4 @@
 node_modules/
 .idea/
 .env
+logs/request_logs.txt

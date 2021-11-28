@@ -9,6 +9,7 @@ import notFoundRoute from './routes/not_found';
 import errorHandler from './strategies/error_handler';
 import { sequelize } from './models';
 import insertAdmin from './models/insert_admin';
+import logMiddleware from './logs/log_middleware';
 
 const app : Express = express();
 
@@ -19,6 +20,7 @@ const app : Express = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(logMiddleware);
 app.use('/', indexRoute);
 app.use('/product', productRoute);
 app.use('/product-admin', productAdminRoute);
