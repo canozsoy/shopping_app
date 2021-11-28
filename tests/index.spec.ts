@@ -24,13 +24,19 @@ const invalidCases = [
   { username: 'test', password: 'testtesttesttesttesttesttesttesttest' },
 ];
 
-describe('Post /login', () => {
+describe('POST /login', () => {
   validCases.forEach((x, i) => {
-    it(`Valid cases should return 401 (not found in database) ${i}`, async () => {
+    it(`Valid cases should return 401 (not found in database) or 200 (login) ${i}`, async () => {
       const res = await request(app).post('/login').send(x);
-      expect(res.status).to.eql(401);
-      const body = JSON.parse(res.error.text);
-      expect(body).to.include.keys('error');
+      if (res.status === 401) {
+        expect(res.status).to.eql(401);
+        const body = JSON.parse(res.error.text);
+        expect(body).to.include.keys('error');
+      } else {
+        expect(res.status).to.eql(200);
+        expect(res.body).to.include.keys(['message', 'currentUser']);
+        expect(res.body.currentUser).to.include.keys(['id', 'username', 'role', 'jwt']);
+      }
     });
   });
   invalidCases.forEach((x, i) => {
@@ -64,15 +70,20 @@ describe('Post /login', () => {
   });
 });
 
-describe('Post /signup', () => {
+describe('POST /signup', () => {
   validCases.forEach((x, i) => {
     it(`Valid cases should return 200 ${i}`, async () => {
       const res = await request(app).post('/signup').send(x);
-      expect(res.status).to.eql(200);
-      const { body } = res;
-      expect(body.message).to.eql('Successfully Created');
-      expect(body).to.include.keys('newUser');
-      expect(body.newUser).to.include.keys(['id', 'username', 'role', 'jwt']);
+      if (res.status === 200) {
+        expect(res.status).to.eql(200);
+        const { body } = res;
+        expect(body.message).to.eql('Successfully Created');
+        expect(body).to.include.keys('newUser');
+        expect(body.newUser).to.include.keys(['id', 'username', 'role', 'jwt']);
+      } else {
+        expect(res.status).to.eql(400);
+        expect(res.body).to.include.keys('error');
+      }
     });
   });
   invalidCases.push({ username: 'admin', password: 'something' });
