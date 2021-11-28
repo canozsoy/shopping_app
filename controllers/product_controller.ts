@@ -7,7 +7,7 @@ import { idValidation } from './validations/validations';
 const listAllProducts = async (req : Request, res : Response, next:NextFunction) => {
   let products;
   try {
-    products = await Product.findAll({});
+    products = await Product.findAll({ attributes: ['id'] });
   } catch (err) {
     const messages = formatErrorDBMessage(err);
     return next(new CustomErrorObject(messages));
