@@ -7,6 +7,9 @@ chai.use(chaiHttp);
 const { expect, request } = chai;
 
 const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlN2FiNGQzLWFmODAtNGRjMS1iNmE5LTAyOTcwYjIxMDYxYiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MzgxMDE3OTIsImV4cCI6MTYzODE4ODE5Mn0.CKQgFciCaWkab_jED5ZIjQAoCWdYToCz5FMb7M8zS7E';
+const badGuid = '12345678';
+const validGuid = '7eb0024b-3260-49f2-b301-00c0b2fb4467';
+const notFoundGuid = '7eb0024b-3260-49f2-b301-00c0b2fb4466';
 
 describe('GET /product', () => {
   it('Product should return 200', () => {
@@ -28,10 +31,6 @@ describe('GET /product', () => {
       });
   });
 });
-
-const badGuid = '12345678';
-const validGuid = '7eb0024b-3260-49f2-b301-00c0b2fb4467';
-const notFoundGuid = '7eb0024b-3260-49f2-b301-00c0b2fb4466';
 
 describe('GET /product/:id', () => {
   it('Product should return 400', () => {
