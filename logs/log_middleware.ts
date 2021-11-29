@@ -14,6 +14,7 @@ const logMiddleware = (req:Request, res:Response, next:NextFunction) => {
   const fileName = './logs/request_logs.txt';
   const items = [
     (new Date()).toISOString(),
+    'INFO',
     req.method,
     req.url,
     req.headers['x-forwarded-for'] || req.socket.remoteAddress,
@@ -24,7 +25,7 @@ const logMiddleware = (req:Request, res:Response, next:NextFunction) => {
     .then(() => {
       writeToFile(row, fileName);
     }).catch(() => {
-      const header = 'Date,Method,URL,IP\n';
+      const header = 'Date,Log_Level,Method,URL,IP\n';
       writeToFile(row, fileName, header);
     });
 
