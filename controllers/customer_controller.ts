@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { orderValidation } from './validations/validations';
-import verifySelf from './helpers/verify_self';
 import { idValidationMiddleware, bodyValidationMiddleware } from './helpers/validation_middlewares';
 import {
   findAllOrders,
@@ -11,36 +10,30 @@ import {
   findAllProduct,
 } from './helpers/database_requests';
 
-const listAllOrders = [
-  verifySelf,
-  idValidationMiddleware('customerId'),
-  async (req : Request, res : Response, next: NextFunction) => {
-    const { customerId } = req.params;
-    const options = {
-      where: {
-        userId: customerId,
-      },
-    };
+const listAllOrders = async (req : Request, res : Response, next: NextFunction) => {
+  const customerId = res.locals.user.id;
+  const options = {
+    where: {
+      userId: customerId,
+    },
+  };
 
-    const { orders, error } = await findAllOrders(options);
-    if (error) {
-      return next(error);
-    }
+  const { orders, error } = await findAllOrders(options);
+  if (error) {
+    return next(error);
+  }
 
-    return res.json({
-      message: 'Successfully Found',
-      orders,
-    });
-  },
-];
+  return res.json({
+    message: 'Successfully Found',
+    orders,
+  });
+};
 
 const createOrder = [
-  verifySelf,
-  idValidationMiddleware('customerId'),
   bodyValidationMiddleware(orderValidation),
   async (req : Request, res : Response, next: NextFunction) => {
     const { products } = req.body;
-    const { customerId } = req.params;
+    const customerId = res.locals.user.id;
     const userQuery = {
       where: {
         id: customerId,
@@ -91,12 +84,11 @@ const createOrder = [
   }];
 
 const orderDetail = [
-  verifySelf,
-  idValidationMiddleware('customerId'),
   idValidationMiddleware('orderId'),
   async (req : Request, res : Response, next: NextFunction) => {
     const { orderId } = req.params;
-    const orderQuery = { where: { id: orderId } };
+    const customerId = res.locals.user.id;
+    const orderQuery = { where: { id: orderId, userId: customerId } };
     const orderItemQuery = { where: { orderId } };
 
     const { error: orderItemsError, orderItems, order } = await findOrderAndOrderItems(

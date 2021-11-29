@@ -6,11 +6,8 @@ import 'mocha';
 chai.use(chaiHttp);
 const { expect, request } = chai;
 
-const customerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiMGNkOTFiLTUwNDUtNDg3Mi1hMWFiLTBjYjYwMDk3NTdjMiIsInVzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzODE3MjQ5MywiZXhwIjoxNjM4MjU4ODkzfQ.Y5-Sjpk__h03FUrpEhkg6zME_y1APaPOnk3ypW70uPw';
-const otherCustomerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiZDhjYzcwLTY4ZDMtNDQwOS04ZmYwLTMxMWQ5YmQ2Njk5OCIsInVzZXJuYW1lIjoidGVzdHRlc3QiLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE2MzgxNzIyNzQsImV4cCI6MTYzODI1ODY3NH0.tWHzzzWOjg2uXJOYGgWSEDtEe9AKW8_XJTKdR7EFDKg';
-const validGuid = '0b0cd91b-5045-4872-a1ab-0cb6009757c2';
-const badGuid = '1234567';
-const invalidGuid = '4c6c5b03-8974-478c-8dd0-5db91563806b';
+const customerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmYzEzYjIzLWU4OWUtNGI2Zi1hNmI0LWMxYTFiMDMwYjJlMCIsInVzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzODE5Njc5MSwiZXhwIjoxNjM4MjgzMTkxfQ.w9OjtKaCQ9nTXMj8TUbJEAcQhcGOvqeVCmM0dJ4YXCM';
+const invalidToken = '89435y9834y589u68jghnfghnfghj8';
 
 const validButNotMatchingProducts = {
   products: [
@@ -19,8 +16,8 @@ const validButNotMatchingProducts = {
 };
 const validProducts = {
   products: [
-    '7a12e653-ed79-4577-81ef-b50ea2381293',
-    '483da10a-df11-467b-98e2-29dcbc6b1f3e',
+    '07582ac3-7401-4eb4-ac09-d852412d7e1c',
+    '71c55795-7eb9-45cf-a0e5-bbd1bc4a8aae',
   ],
 };
 
@@ -31,30 +28,22 @@ const invalidBody = [
   { },
 ];
 
-const validOrderId = '9c973ad9-851e-4ba5-9fe9-5af33c8d8e5e';
+const validOrderId = '95793757-5fdd-4073-9228-cb99f771c56e';
 const notFoundOrderId = '9c973ad9-851e-4ba5-9fe9-5af33c8d8e5f';
+const badGuid = '324345045';
 
 describe('GET /customer/:customerId/order', () => {
-  it('List orders should return 403 (bad guid due to verify self)', (done) => {
-    request(app).get(`/customer/${badGuid}/order`)
-      .set({ Authorization: `Bearer ${customerToken}` })
+  it('List orders should return 401 (invalid token)', (done) => {
+    request(app).get('/customer/order')
+      .set({ Authorization: `Bearer ${invalidToken}` })
       .then((res) => {
-        expect(res.status).to.eql(403);
-        expect(res.body).to.include.keys('error');
-        done();
-      });
-  });
-  it('List orders should return 403 (invalid guid due to verify self)', (done) => {
-    request(app).get(`/customer/${invalidGuid}/order`)
-      .set({ Authorization: `Bearer ${customerToken}` })
-      .then((res) => {
-        expect(res.status).to.eql(403);
+        expect(res.status).to.eql(401);
         expect(res.body).to.include.keys('error');
         done();
       });
   });
   it('List orders should return 401 (no token)', (done) => {
-    request(app).get(`/customer/${validGuid}/order`)
+    request(app).get('/customer/order')
       .then((res) => {
         expect(res.status).to.eql(401);
         expect(res.body).to.include.keys('error');
@@ -62,7 +51,7 @@ describe('GET /customer/:customerId/order', () => {
       });
   });
   it('List orders should return 200 or 404 (if not exists)', (done) => {
-    request(app).get(`/customer/${validGuid}/order`)
+    request(app).get('/customer/order')
       .set({ Authorization: `Bearer ${customerToken}` })
       .then((res) => {
         if (res.status === 404) {
@@ -79,44 +68,26 @@ describe('GET /customer/:customerId/order', () => {
 });
 
 describe('POST /customer/:customerId/order', () => {
-  it('List orders should return 403 (bad guid, verify self)', (done) => {
-    request(app).post(`/customer/${badGuid}/order`)
-      .set({ Authorization: `Bearer ${customerToken}` })
-      .then((res) => {
-        expect(res.status).to.eql(403);
-        expect(res.body).to.include.keys('error');
-        done();
-      });
-  });
-  it('List orders should return 403 (invalid guid, verify self)', (done) => {
-    request(app).post(`/customer/${invalidGuid}/order`)
-      .set({ Authorization: `Bearer ${customerToken}` })
-      .then((res) => {
-        expect(res.status).to.eql(403);
-        expect(res.body).to.include.keys('error');
-        done();
-      });
-  });
-  it('List orders should return 401 (no token)', (done) => {
-    request(app).post(`/customer/${invalidGuid}/order`)
+  it('List orders should return 401 (invalid token)', (done) => {
+    request(app).post('/customer/order')
+      .set({ Authorization: `Bearer ${invalidToken}` })
       .then((res) => {
         expect(res.status).to.eql(401);
         expect(res.body).to.include.keys('error');
         done();
       });
   });
-  it('List orders should return 403 (other customer\'s token)', (done) => {
-    request(app).post(`/customer/${validGuid}/order`)
-      .set({ Authorization: `Bearer ${otherCustomerToken}` })
+  it('List orders should return 401 (no token)', (done) => {
+    request(app).post('/customer/order')
       .then((res) => {
-        expect(res.status).to.eql(403);
+        expect(res.status).to.eql(401);
         expect(res.body).to.include.keys('error');
         done();
       });
   });
   invalidBody.forEach((x, i) => {
     it(`Create order should return 400 (invalid body) ${i}`, (done) => {
-      request(app).post(`/customer/${validGuid}/order`)
+      request(app).post('/customer/order')
         .set({ Authorization: `Bearer ${customerToken}` })
         .send(x)
         .then((res) => {
@@ -127,7 +98,7 @@ describe('POST /customer/:customerId/order', () => {
     });
   });
   it('Create order should return 400 / 404 (not matching or wrong request)', (done) => {
-    request(app).post(`/customer/${validGuid}/order`)
+    request(app).post('/customer/order')
       .set({ Authorization: `Bearer ${customerToken}` })
       .send(validButNotMatchingProducts)
       .then((res) => {
@@ -138,7 +109,7 @@ describe('POST /customer/:customerId/order', () => {
       });
   });
   it('Create order should return 200 (valid request)', (done) => {
-    request(app).post(`/customer/${validGuid}/order`)
+    request(app).post('/customer/order')
       .set({ Authorization: `Bearer ${customerToken}` })
       .send(validProducts)
       .then((res) => {
@@ -152,7 +123,7 @@ describe('POST /customer/:customerId/order', () => {
 
 describe('GET /customer/:customerId/order/:orderId', () => {
   it('Order detail should return 401 (no token)', (done) => {
-    request(app).get(`/customer/${validGuid}/order/${validOrderId}`)
+    request(app).get(`/customer/order/${validOrderId}`)
       .then((res) => {
         expect(res.status).to.eql(401);
         expect(res.body).to.include.keys('error');
@@ -160,7 +131,7 @@ describe('GET /customer/:customerId/order/:orderId', () => {
       });
   });
   it('Order detail should return 400 (bad id)', (done) => {
-    request(app).get(`/customer/${validGuid}/order/${badGuid}`)
+    request(app).get(`/customer/order/${badGuid}`)
       .set({ Authorization: `Bearer ${customerToken}` })
       .then((res) => {
         expect(res.status).to.eql(400);
@@ -169,7 +140,7 @@ describe('GET /customer/:customerId/order/:orderId', () => {
       });
   });
   it('Order detail should return 404 (not found id)', (done) => {
-    request(app).get(`/customer/${validGuid}/order/${notFoundOrderId}`)
+    request(app).get(`/customer/order/${notFoundOrderId}`)
       .set({ Authorization: `Bearer ${customerToken}` })
       .then((res) => {
         expect(res.status).to.eql(404);
@@ -178,7 +149,7 @@ describe('GET /customer/:customerId/order/:orderId', () => {
       });
   });
   it('Orders should return 200 or 404 (if not exists)', (done) => {
-    request(app).get(`/customer/${validGuid}/order/${validOrderId}`)
+    request(app).get(`/customer/order/${validOrderId}`)
       .set({ Authorization: `Bearer ${customerToken}` })
       .then((res) => {
         if (res.status === 404) {

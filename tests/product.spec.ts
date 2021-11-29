@@ -8,7 +8,7 @@ const { expect, request } = chai;
 
 const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJmMTJjMjhmLWQ4NjYtNDMzZS1iMTY4LWFmYzA0MmZhMzMzMSIsInVzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzODE2OTc5MiwiZXhwIjoxNjM4MjU2MTkyfQ.zDZ4u3VYaML88BqEqusq2bXbj_cQPyCTFPBY5YmAi_w';
 const badGuid = '12345678';
-const validGuid = '145be537-d65b-453e-a7f7-deb2b447b0ba';
+const validGuid = '07582ac3-7401-4eb4-ac09-d852412d7e1c';
 const notFoundGuid = 'bf12c28f-d866-433e-b168-afc042fa3330';
 
 describe('GET /product', () => {

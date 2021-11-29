@@ -6,10 +6,10 @@ const router = express.Router();
 
 router.use(verifyJWT);
 
-router.route('/:customerId/order')
+router.route('/order')
   .get(customerController.listAllOrders)
   .post(customerController.createOrder);
 
-router.get('/:customerId/order/:orderId', customerController.orderDetail);
+router.get('/order/:orderId', customerController.orderDetail);
 
 export default router;

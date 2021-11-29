@@ -9,7 +9,7 @@ const { expect, request } = chai;
 const customerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiMGNkOTFiLTUwNDUtNDg3Mi1hMWFiLTBjYjYwMDk3NTdjMiIsInVzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzODE3MDQzNCwiZXhwIjoxNjM4MjU2ODM0fQ.N6taFySdi-hOVS-gc1_lUmOeYY0BLu_m3_C4w7MeKoM';
 const adminToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ1MzZmZWI1LTVlMzctNGFkMC04ZDRlLWUzNzA2ZWM3NzViOSIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MzgxNzA0NTksImV4cCI6MTYzODI1Njg1OX0.XopkIJGnHxuzVQDB-VnJqTCGZCL-rOyxikR8oCdyjQE';
 const badGuid = '12345678';
-const validGuid = '145be537-d65b-453e-a7f7-deb2b447b0ba';
+const validGuid = '07582ac3-7401-4eb4-ac09-d852412d7e1c';
 const notFoundGuid = '7eb0024b-3260-49f2-b301-00c0b2fb4466';
 
 const validBody = [
