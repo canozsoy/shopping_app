@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import bcrypt from 'bcrypt';
 import { User } from '../models';
-import { formatErrorDBMessage, formatErrorValidationMessage } from './helpers/format_error_message';
+import { formatErrorDBMessage } from './helpers/format_error_message';
 import CustomErrorObject from '../strategies/error_object';
 import { adminUserValidations } from './validations/validations';
+import { bodyValidationMiddleware } from './helpers/validation_middlewares';
+import { generateHashedPassword } from './helpers/password_operations';
+import { userCreate } from './helpers/database_requests';
 
 const getUsers = async (req:Request, res:Response, next: NextFunction) => {
   let users;
@@ -20,41 +22,38 @@ const getUsers = async (req:Request, res:Response, next: NextFunction) => {
 };
 
 // Same as signup, only role can be defined, and jwt not generated
-const postUser = async (req:Request, res: Response, next:NextFunction) => {
-  const validationResult = adminUserValidations.validate(req.body, { abortEarly: false });
-  if (validationResult.error) {
-    const messages = formatErrorValidationMessage(validationResult.error);
-    return next(new CustomErrorObject(messages, 400));
-  }
-  const { username, password, role } = req.body;
-  let hashedPassword;
-  try {
-    const hashSalt = process.env.SALT as string;
-    hashedPassword = await bcrypt.hash(password, +hashSalt);
-  } catch (err) {
-    return next(new CustomErrorObject({ err }, 500));
-  }
-  let newUser;
-  try {
-    newUser = await User.create({
+const postUser = [
+  bodyValidationMiddleware(adminUserValidations),
+  async (req:Request, res: Response, next:NextFunction) => {
+    const { username, password, role } = req.body;
+
+    const { error: hashError, hashedPassword } = await generateHashedPassword(password);
+
+    if (hashError || !hashedPassword) {
+      return next(hashError);
+    }
+
+    const userQuery = {
       username,
       password: hashedPassword,
       role,
-    });
-  } catch (err) {
-    const messages = formatErrorDBMessage(err);
-    return next(new CustomErrorObject(messages, 400));
-  }
+    };
 
-  return res.json({
-    message: 'Successfully Created',
-    newUser: {
-      id: newUser.id,
-      username: newUser.username,
-      role: newUser.role,
-    },
-  });
-};
+    const { error: userCreateError, newUser } = await userCreate(userQuery);
+
+    if (userCreateError || !newUser) {
+      return next(userCreateError);
+    }
+
+    return res.json({
+      message: 'Successfully Created',
+      newUser: {
+        id: newUser.id,
+        username: newUser.username,
+        role: newUser.role,
+      },
+    });
+  }];
 
 export default {
   getUsers,

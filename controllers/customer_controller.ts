@@ -1,31 +1,30 @@
 import { NextFunction, Request, Response } from 'express';
-import { idValidation, orderValidation } from './validations/validations';
+import { orderValidation } from './validations/validations';
 import verifySelf from './helpers/verify_self';
-import { formatErrorValidationMessage, formatErrorDBMessage } from './helpers/format_error_message';
-import CustomErrorObject from '../strategies/error_object';
+import { idValidationMiddleware, bodyValidationMiddleware } from './helpers/validation_middlewares';
 import {
-  Order, Product, User, OrderItems,
-} from '../models';
+  findAllOrders,
+  findAndCompareUserAndProduct,
+  createOrderCall,
+  bulkCreateOrderItems,
+  findOrderAndOrderItems,
+  findAllProduct,
+} from './helpers/database_requests';
 
 const listAllOrders = [
   verifySelf,
+  idValidationMiddleware('customerId'),
   async (req : Request, res : Response, next: NextFunction) => {
-    const idValidationResult = idValidation.validate(req.params.customerId);
-    if (idValidationResult.error) {
-      const messages = formatErrorValidationMessage(idValidationResult.error);
-      return next(new CustomErrorObject(messages, 400));
-    }
-
     const { customerId } = req.params;
-    let orders;
-    try {
-      orders = await Order.findAll({ where: { userId: customerId } });
-    } catch (err) {
-      const messages = formatErrorDBMessage(err);
-      return next(new CustomErrorObject(messages, 500));
-    }
-    if (!orders.length) {
-      return next(new CustomErrorObject([{ message: 'No order found' }], 404));
+    const options = {
+      where: {
+        userId: customerId,
+      },
+    };
+
+    const { orders, error } = await findAllOrders(options);
+    if (error) {
+      return next(error);
     }
 
     return res.json({
@@ -37,54 +36,40 @@ const listAllOrders = [
 
 const createOrder = [
   verifySelf,
+  idValidationMiddleware('customerId'),
+  bodyValidationMiddleware(orderValidation),
   async (req : Request, res : Response, next: NextFunction) => {
-    const idValidationResult = idValidation.validate(req.params.customerId);
-    if (idValidationResult.error) {
-      const messages = formatErrorValidationMessage(idValidationResult.error);
-      return next(new CustomErrorObject(messages, 400));
-    }
-    const bodyValidationResult = orderValidation.validate(req.body, { abortEarly: false });
-    if (bodyValidationResult.error) {
-      const messages = formatErrorValidationMessage(bodyValidationResult.error);
-      return next(new CustomErrorObject(messages, 400));
-    }
-
     const { products } = req.body;
     const { customerId } = req.params;
-    let queryResults;
-    try {
-      queryResults = await Promise.all([
-        User.findOne({ where: { id: customerId } }),
-        Product.findAll({
-          where: {
-            id: products,
-          },
-        }),
-      ]);
-    } catch (err) {
-      const message = formatErrorDBMessage(err);
-      return next(new CustomErrorObject(message, 500));
-    }
-    const [customer, productsDB] = queryResults;
-    if (!customer) {
-      return next(new CustomErrorObject([{ message: 'User not found' }], 404));
-    }
-    if (!productsDB.length) {
-      return next(new CustomErrorObject([{ message: 'Products not found' }], 404));
-    }
-    if (products.length !== productsDB.length) {
-      return next(new CustomErrorObject([{ message: 'Products not match' }], 400));
+    const userQuery = {
+      where: {
+        id: customerId,
+      },
+    };
+    const productQuery = {
+      where: {
+        id: products,
+      },
+    };
+
+    const { error: errorCompare, customer } = await findAndCompareUserAndProduct(
+      userQuery,
+      productQuery,
+      products,
+    );
+    if (errorCompare || !customer) {
+      return next(errorCompare);
     }
 
-    let order;
-    try {
-      order = await Order.create({
-        date: new Date(),
-        userId: customer.id,
-      });
-    } catch (err) {
-      const message = formatErrorDBMessage(err);
-      return next(new CustomErrorObject(message, 500));
+    const createOrderQuery = {
+      date: new Date(),
+      userId: customer.id,
+    };
+
+    const { error: errorCreateOrder, order } = await createOrderCall(createOrderQuery);
+
+    if (errorCreateOrder || !order) {
+      return next(errorCreateOrder);
     }
 
     const orderId = order.id;
@@ -93,12 +78,10 @@ const createOrder = [
       productId: x,
     }));
 
-    let orderItems;
-    try {
-      orderItems = await OrderItems.bulkCreate(queries, { validate: true, returning: true });
-    } catch (err) {
-      const messages = formatErrorDBMessage(err);
-      return next(new CustomErrorObject(messages, 500));
+    const { error: bulkCreateError, orderItems } = await bulkCreateOrderItems(queries);
+
+    if (bulkCreateError || !orderItems) {
+      return next(bulkCreateError);
     }
 
     return res.json({
@@ -109,45 +92,33 @@ const createOrder = [
 
 const orderDetail = [
   verifySelf,
+  idValidationMiddleware('customerId'),
+  idValidationMiddleware('orderId'),
   async (req : Request, res : Response, next: NextFunction) => {
-    const { customerId, orderId } = req.params;
-    const customerIdValidationResult = idValidation.validate(customerId);
-    const orderIdValidationResult = idValidation.validate(orderId);
-    const error = customerIdValidationResult.error || orderIdValidationResult.error;
-    if (error) {
-      const messages = formatErrorValidationMessage(error);
-      return next(new CustomErrorObject(messages, 400));
+    const { orderId } = req.params;
+    const orderQuery = { where: { id: orderId } };
+    const orderItemQuery = { where: { orderId } };
+
+    const { error: orderItemsError, orderItems, order } = await findOrderAndOrderItems(
+      orderQuery,
+      orderItemQuery,
+    );
+
+    if (orderItemsError || !orderItems || !order) {
+      return next(orderItemsError);
     }
 
-    let queryResults;
-    try {
-      queryResults = await Promise.all([
-        OrderItems.findAll({ where: { orderId } }),
-        Order.findOne({ where: { id: orderId } }),
-      ]);
-    } catch (err) {
-      const messages = formatErrorDBMessage(err);
-      return next(new CustomErrorObject(messages, 500));
-    }
+    const productIds = orderItems.map((x:{ productId: string }) => x.productId);
+    const productQuery = {
+      where: {
+        id: productIds,
+      },
+    };
 
-    const [orderItems, order] = queryResults;
+    const { error: findProductErr, products } = await findAllProduct(productQuery);
 
-    if (!orderItems.length || !order) {
-      return next(new CustomErrorObject([{ message: 'No order found' }], 404));
-    }
-
-    const productIds = orderItems.map((x) => x.productId);
-
-    let products;
-    try {
-      products = await Product.findAll({ where: { id: productIds } });
-    } catch (err) {
-      const messages = formatErrorDBMessage(err);
-      return next(new CustomErrorObject(messages, 500));
-    }
-
-    if (!products.length) {
-      return next(new CustomErrorObject([{ message: 'Products not found' }], 404));
+    if (findProductErr || !products) {
+      return next(findProductErr);
     }
 
     return res.json({

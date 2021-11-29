@@ -181,7 +181,6 @@ describe('GET /customer/:customerId/order/:orderId', () => {
     request(app).get(`/customer/${validGuid}/order/${validOrderId}`)
       .set({ Authorization: `Bearer ${customerToken}` })
       .then((res) => {
-        console.log(res.status, res.body);
         if (res.status === 404) {
           expect(res.body).to.include.keys('error');
           done();
