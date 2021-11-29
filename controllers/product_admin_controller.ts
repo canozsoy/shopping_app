@@ -58,7 +58,7 @@ const changeProduct = async (req:Request, res:Response, next: NextFunction) => {
   }
   return res.json({
     message: 'Successfully Updated',
-    updatedProduct: item,
+    updatedProduct: item[0],
   });
 };
 
