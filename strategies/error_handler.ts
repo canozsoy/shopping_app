@@ -11,7 +11,7 @@ const errorHandler = (
     return next(err);
   }
   return res.status(err.status || 500).json({
-    error: err.object,
+    error: err.object || 'Server Error',
   });
 };
 
