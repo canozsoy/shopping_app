@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "45ec26af-8bfd-4cc1-b616-fafb1770c85d",
 		"name": "Shopping App",
+		"description": "*   Uygulamayı çalıştırmadan .env dosyasını içine yerleştirmek gerekiyor. Database, jwt secret ve ilk admin şifresi gibi bilgiler oradan okunuyor.\n*   Dökümantasyon docs dosyasının içinde, postman'e import etmek gerekiyor.\n*   Database heroku free'de olduğu için istekler biraz yavaş çalışıyor. Lokalde çok çok daha hızlı.\n*   Testlerin hepsinin düzgün olarak çalışabilmesi için başlarında bulunan alanların güncel olarak doldurulması gerekiyor. (token, id v.b). Daha otomatize yazılabilinirdi aslında ama ilk kez test yazdım açıkçası.\n*   Başlangıçta otomatik olarak admin kullanıcısı .env dosyasından okunan şifreyle admin kullanıcısı oluşuyor.\n*   product ekleme, product değiştirme, tüm kullanıcıları listeleme ve yeni admin kullanıcısı yaratma sadece admin kullanıcısıyla yapılabiliniyor.\n*   Kullanıcı oluşturmak için /signup endpointi, kullanıcı girişi yapmak için /login endpointine istek atmak gerekiyor. Buradan JWT gelecektir. Diğer endpointlerde çalışabilmek için Bearer token olarak göndermek gerekiyor.\n*   Admin girişinden product oluşturmak için /product-admin'e POST, değiştirmek için ise /product-admin/:productId 'e POST göndermek gerekiyor.\n*   Admin girişinden tüm kullanıcıları listelemek için /user-admin'e GET isteği, eklemek için POST göndermek gerekiyor.\n*   Customer girişinden kullanıcının orderlarını görmek için /customer/order'a GET, yeni order eklemek için POST göndermek gerekiyor. Order detail'i görmek için ise /customer/order/:orderId ' e get göndermek gerekiyor.\n*   Tüm productları görmek için /product'a GET isteği, tek product detaylarını görüntülemek için /product/:id olarak GET göndermek gerekiyor.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -18,12 +19,12 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "admin",
+									"value": "test",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "admin",
+									"value": "test",
 									"type": "text"
 								}
 							]
@@ -75,7 +76,7 @@
 					"response": []
 				}
 			],
-			"description": "login ve signup'ın oldugu folder index\n\njwt'yi almak için login veya signup'a istek gelmeli"
+			"description": "*   login ve signup'ın örnek yapısı aşağıdaki gibi\n*   jwt'yi almak için login veya signup'a istek gelmeli"
 		},
 		{
 			"name": "admin-product",
@@ -87,7 +88,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDIwNzU2LCJleHAiOjE2MzgxMDcxNTZ9._veumTzGJ_9p9JgyRG8ghcFjslmreRXwPL6I-p9MfxE",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU3MWQwYjY0LWIzNWQtNDk3Zi04NTFlLTJmNTRmNDA0OGQ3ZiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MzgxOTI5OTIsImV4cCI6MTYzODI3OTM5Mn0.tKEbs4r9PRO9hvDHVkswZL3S9X2IhieVb6b-bOk4Z7A",
 								"type": "text"
 							}
 						],
@@ -120,7 +121,8 @@
 							"path": [
 								"product-admin"
 							]
-						}
+						},
+						"description": "*   name ve price zorunlu alanlar detail opsiyonel"
 					},
 					"response": []
 				},
@@ -131,7 +133,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDIwNzU2LCJleHAiOjE2MzgxMDcxNTZ9._veumTzGJ_9p9JgyRG8ghcFjslmreRXwPL6I-p9MfxE",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU3MWQwYjY0LWIzNWQtNDk3Zi04NTFlLTJmNTRmNDA0OGQ3ZiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MzgxOTI5OTIsImV4cCI6MTYzODI3OTM5Mn0.tKEbs4r9PRO9hvDHVkswZL3S9X2IhieVb6b-bOk4Z7A",
 								"type": "text"
 							}
 						],
@@ -176,15 +178,16 @@
 							"variable": [
 								{
 									"key": "productId",
-									"value": null
+									"value": "a6d6dc3f-d997-4735-9ae8-e66a008b3bc1"
 								}
 							]
-						}
+						},
+						"description": "*   Örnek yapı create productla aynı, farklı olarak key'lerden en az bir tane göndermek gerekiyor."
 					},
 					"response": []
 				}
 			],
-			"description": "Sadece admin erişimi olan product ekleme / değiştirme işlemlerinin olduğu endpointler"
+			"description": "*   Sadece admin erişimi olan product ekleme / değiştirme işlemlerinin olduğu endpointler\n*   Örnek yapısı aşağıdaki gibi"
 		},
 		{
 			"name": "admin-user",
@@ -199,7 +202,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDIwNzU2LCJleHAiOjE2MzgxMDcxNTZ9._veumTzGJ_9p9JgyRG8ghcFjslmreRXwPL6I-p9MfxE",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlN2FiNGQzLWFmODAtNGRjMS1iNmE5LTAyOTcwYjIxMDYxYiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MzgxMDk4MzIsImV4cCI6MTYzODE5NjIzMn0.ztj9dJHzMF_b6SMkgXrrq366Y6yiZDPJotR2xNPYhss",
 								"type": "text"
 							}
 						],
@@ -260,12 +263,13 @@
 							"path": [
 								"user-admin"
 							]
-						}
+						},
+						"description": "*   Bu endpointte singup'a ek olarak role tanımlanabiliniyor."
 					},
 					"response": []
 				}
 			],
-			"description": "Sadece admin'in user listeleme ve ekleme gibi şeyler yapabileceği endpointler\n\nSignup'a ekstra olarak admin ekleme opsiyonu var"
+			"description": "*   Sadece admin'in user listeleme ve ekleme gibi şeyler yapabileceği endpointler\n*   Signup'a ekstra olarak admin ekleme opsiyonu var"
 		},
 		{
 			"name": "customer-order",
@@ -277,7 +281,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiNzQzZTljLWZhYmMtNDkwYy04ODQxLWUwNzEyYTYwYmI4OSIsInVzZXJuYW1lIjoiY2FuIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNjM4MDI4Nzk0LCJleHAiOjE2MzgxMTUxOTR9.J_jbjwJI8fDADuIUM82jYBqjKiVaVbDLcfNsY2qdFL4",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmYzEzYjIzLWU4OWUtNGI2Zi1hNmI0LWMxYTFiMDMwYjJlMCIsInVzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzODE5NTUyMiwiZXhwIjoxNjM4MjgxOTIyfQ.BdxRLUfjjB5KnUHS8WMSWlcqg0v_ggtUXaFT5_4pEac",
 								"type": "text"
 							}
 						],
@@ -286,34 +290,28 @@
 							"urlencoded": [
 								{
 									"key": "products",
-									"value": "7eb0024b-3260-49f2-b301-00c0b2fb4467",
+									"value": "07582ac3-7401-4eb4-ac09-d852412d7e1c",
 									"type": "text"
 								},
 								{
 									"key": "products",
-									"value": "6f218a09-890a-4cac-a870-82ba7cc64ea2",
+									"value": "71c55795-7eb9-45cf-a0e5-bbd1bc4a8aae",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "localhost:3000/customer/:customerId/order",
+							"raw": "localhost:3000/customer/order",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"customer",
-								":customerId",
 								"order"
-							],
-							"variable": [
-								{
-									"key": "customerId",
-									"value": "ab743e9c-fabc-490c-8841-e0712a60bb89"
-								}
 							]
-						}
+						},
+						"description": "*   products'ın array olarak gönderilmesi gerekiyor. Aynı üründen iki tane gönderilemiyor."
 					},
 					"response": []
 				},
@@ -327,35 +325,23 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiNzQzZTljLWZhYmMtNDkwYy04ODQxLWUwNzEyYTYwYmI4OSIsInVzZXJuYW1lIjoiY2FuIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNjM4MDI4Nzk0LCJleHAiOjE2MzgxMTUxOTR9.J_jbjwJI8fDADuIUM82jYBqjKiVaVbDLcfNsY2qdFL4",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmYzEzYjIzLWU4OWUtNGI2Zi1hNmI0LWMxYTFiMDMwYjJlMCIsInVzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzODE5NTUyMiwiZXhwIjoxNjM4MjgxOTIyfQ.BdxRLUfjjB5KnUHS8WMSWlcqg0v_ggtUXaFT5_4pEac",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "urlencoded",
-							"urlencoded": [],
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"urlencoded": []
 						},
 						"url": {
-							"raw": "localhost:3000/customer/:customerId/order",
+							"raw": "localhost:3000/customer/order",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"customer",
-								":customerId",
 								"order"
-							],
-							"variable": [
-								{
-									"key": "customerId",
-									"value": "ab743e9c-fabc-490c-8841-e0712a60bb89"
-								}
 							]
 						}
 					},
@@ -371,7 +357,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiNzQzZTljLWZhYmMtNDkwYy04ODQxLWUwNzEyYTYwYmI4OSIsInVzZXJuYW1lIjoiY2FuIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNjM4MDI4Nzk0LCJleHAiOjE2MzgxMTUxOTR9.J_jbjwJI8fDADuIUM82jYBqjKiVaVbDLcfNsY2qdFL4",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmYzEzYjIzLWU4OWUtNGI2Zi1hNmI0LWMxYTFiMDMwYjJlMCIsInVzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzODE5NTUyMiwiZXhwIjoxNjM4MjgxOTIyfQ.BdxRLUfjjB5KnUHS8WMSWlcqg0v_ggtUXaFT5_4pEac",
 								"type": "text"
 							}
 						],
@@ -380,25 +366,20 @@
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "localhost:3000/customer/:customerId/order/:orderId",
+							"raw": "localhost:3000/customer/order/:orderId",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"customer",
-								":customerId",
 								"order",
 								":orderId"
 							],
 							"variable": [
 								{
-									"key": "customerId",
-									"value": "ab743e9c-fabc-490c-8841-e0712a60bb89"
-								},
-								{
 									"key": "orderId",
-									"value": "6f218a09-890a-4cac-a870-82ba7cc64ea2"
+									"value": "95793757-5fdd-4073-9228-cb99f771c56e"
 								}
 							]
 						}
@@ -406,7 +387,7 @@
 					"response": []
 				}
 			],
-			"description": "customerların order oluşturabildiği orderlarını listeleyebildiği ve order detaylarını görüntüleyebildiği endpointler"
+			"description": "*   customerların order oluşturabildiği, orderlarını listeleyebildiği ve order detaylarını görüntüleyebildiği endpointler"
 		},
 		{
 			"name": "product",
@@ -418,7 +399,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlN2FiNGQzLWFmODAtNGRjMS1iNmE5LTAyOTcwYjIxMDYxYiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MzgxMDE3OTIsImV4cCI6MTYzODE4ODE5Mn0.CKQgFciCaWkab_jED5ZIjQAoCWdYToCz5FMb7M8zS7E",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmYzEzYjIzLWU4OWUtNGI2Zi1hNmI0LWMxYTFiMDMwYjJlMCIsInVzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzODE5NTUyMiwiZXhwIjoxNjM4MjgxOTIyfQ.BdxRLUfjjB5KnUHS8WMSWlcqg0v_ggtUXaFT5_4pEac",
 								"type": "text"
 							}
 						],
@@ -442,7 +423,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlN2FiNGQzLWFmODAtNGRjMS1iNmE5LTAyOTcwYjIxMDYxYiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MzgxMDE3OTIsImV4cCI6MTYzODE4ODE5Mn0.CKQgFciCaWkab_jED5ZIjQAoCWdYToCz5FMb7M8zS7E",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUyYmQ3NDM4LTk3MDgtNDRmOC04NGJmLWM1ZTJlNWIzYmIxYiIsInVzZXJuYW1lIjoidGVzdCIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzODE5Mjk0MywiZXhwIjoxNjM4Mjc5MzQzfQ.vtXrz7U2gORyWiNzy_jEJ_iMCk4KtEmqcbgfrDdI0MA",
 								"type": "text"
 							}
 						],
@@ -459,7 +440,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "7eb0024b-3260-49f2-b301-00c0b2fb4467"
+									"value": "a6d6dc3f-d997-4735-9ae8-e66a008b3bc1"
 								}
 							]
 						}
@@ -467,7 +448,7 @@
 					"response": []
 				}
 			],
-			"description": "endpoints to find all product ids and product details"
+			"description": "*   endpoints to find all product ids and product details"
 		}
 	],
 	"event": [
