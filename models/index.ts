@@ -8,17 +8,15 @@ import OrderItemsCreate from './order_items';
 dotenv.config();
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME as string,
-  process.env.DB_USER as string,
-  process.env.PASSWORD as string,
+  process.env.DB_URL as string,
   {
-    host: process.env.HOST,
-    dialect: 'postgres',
-    logging: false,
-    pool: {
-      idle: 10000,
-      evict: 20000,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
     },
+    logging: false,
   },
 );
 
